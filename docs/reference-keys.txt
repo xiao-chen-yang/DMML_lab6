@@ -1,0 +1,4 @@
+welcome-to-dmml-lab-6
+exercise-1-task-2-in-lecture-notes
+exercise-2-german-data
+exercise-3-dividend-data

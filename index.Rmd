@@ -1,0 +1,80 @@
+---
+title: "STATS5099 Data Mining and Machine Learning"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+biblio-style: apalike
+link-citations: yes
+---
+
+```{r setup, include = FALSE}
+library(webexercises)
+library(tinytex)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE)
+
+library(neuralnet)
+library(NeuralNetTools)
+options(digits=7)
+```
+
+
+```{r include=FALSE, echo=FALSE}
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
+
+
+# Welcome to DMML Lab 6
+
+In week 6, we have studied neural networks, which consists an input layer, an output layer and any number of hidden layers specified by the user. 
+
+To fit a relatively simple neural network (by simple, it means the network does not contain too many hidden layers, is not optimised using too advanced algorithms, and/or does not include regularisation techniques such as dropout), we use the `neuralnet` function from the `neuralnet` package. In particular, we need to specify the number of hidden layers and hidden nodes using the argument `hidden`, the loss function using `err.fct`, the activation function using `act.fct`, the activation function for the output layer using `linear.output` (set to `TRUE` for a linear activation function and `FALSE` to be the same as the activation function specified in `act.fct`). There are many other arguments could be manually set, such as the optimisation algorithm and learning rate; see help page of `neuralnet` for more details. 
+```{r eval=FALSE}
+library(neuralnet)
+
+# an example neural network for regression tasks
+Model <- neuralnet(Y~X1+X2+..., data, hidden=c(5), err.fct="sse", act.fct="logistic", linear.output=TRUE)
+# The network contains a single hidden layers with 5 hidden nodes.
+# The network uses sum of squared errors as the loss function.
+# The network uses logistic function as the activation function for hidden nodes 
+# and linear function as the activation function for output nodes. 
+
+# an example neural network for classification tasks
+softplus <- function(x) log(1+exp(x))
+Model <- neuralnet(Y~X1+X2+..., data, hidden=c(5,3), err.fct="ce", act.fct=softplus, linear.output=FALSE)
+# The network contains two hidden layers with 5 and 3 hidden nodes in each layer.
+# The network uses cross entropy as the loss function.
+# The network uses a user-defined softplus function as the activation function for hidden nodes and output nodes.
+# The softplus function is a smooth approximation to rectified linear unit (ReLU) function. 
+```
+
+To visualise the neural network, we could use the default `plot` function or `plotnet` function from the `NeuralNetTools` package. 
+```{r eval=FALSE}
+# option 1
+plot(Model)
+
+# option 2
+# library(devtools); install_github('fawda123/NeuralNetTools')
+library(NeuralNetTools)
+plotnet(Model)
+```
+
+To use the model for predicting new observations, we could use the default `predict` function or the `compute` function. This returns the probability of the observation in each class and hence requires further conversion to evaluate the classification performance.
+```{r eval=FALSE}
+# option 1
+test_predict_prob<- predict(model, test_data)
+
+# option 2
+test_predict_prob<- neuralnet::compute(model, test_data)$net.result
+
+# convert to class label for binary classification
+test_predict_class <- ifelse(test_predict_prob>0.5, class1, class2) #class 1 and class 2 are the class names
+
+# convert to class label for multi-class classification
+test_predict_class <- apply(test_predict_prob, 1, which.max)
+```
+
