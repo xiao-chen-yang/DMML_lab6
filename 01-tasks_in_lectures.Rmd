@@ -38,7 +38,7 @@ test_Boston <- scaled[-index,]
 `r hide("Hint")`
 Suppose the hidden layer has only one hidden node. The corresponding `R` code is as follows.
 ```{r eval=FALSE}
-Model <- neuralnet(median.value~crime.rate+low.socio.status+aver.rooms, 
+Model <- neuralnet(median.value~crime.rate+low.socio.status+aver.rooms+river.bounds, 
                    data=train_Boston, hidden=c(1), linear.output=TRUE)
 ```
 `r unhide()`

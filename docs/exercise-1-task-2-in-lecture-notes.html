@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2 Exercise 1: Task 2 in lecture notes | STATS5099 Data Mining and Machine Learning</title>
   <meta name="description" content="2 Exercise 1: Task 2 in lecture notes | STATS5099 Data Mining and Machine Learning" />
-  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2 Exercise 1: Task 2 in lecture notes | STATS5099 Data Mining and Machine Learning" />
   <meta property="og:type" content="book" />
@@ -117,6 +117,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 <link rel="stylesheet" href="include/webex.css" type="text/css" />
@@ -164,23 +168,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>For each neural network (i.e. the network with the specific number of hidden nodes), estimate the sum of squared errors (SSEs) for the training and test data sets. Visualise the SSEs with a graph and comment on its output.</p>
 <p><br></p>
 <p>The following codes were included in the lecture note to pre-process the data and split the data into training and test sets.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data</span></span>
-<span id="cb4-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb4-3"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Boston)</span>
-<span id="cb4-4"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-4" aria-hidden="true" tabindex="-1"></a>Boston <span class="ot">&lt;-</span> Boston[,<span class="fu">c</span>(<span class="st">&quot;medv&quot;</span>,<span class="st">&quot;crim&quot;</span>,<span class="st">&quot;lstat&quot;</span>,<span class="st">&quot;rm&quot;</span>,<span class="st">&quot;rad&quot;</span>,<span class="st">&quot;chas&quot;</span>)]</span>
-<span id="cb4-5"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(Boston) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;median.value&quot;</span>,<span class="st">&quot;crime.rate&quot;</span>,<span class="st">&quot;low.socio.status&quot;</span>,</span>
-<span id="cb4-6"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;aver.rooms&quot;</span>,<span class="st">&quot;index.radial.highways&quot;</span>,<span class="st">&quot;river.bounds&quot;</span>)</span>
-<span id="cb4-7"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># min-max normalisation</span></span>
-<span id="cb4-9"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-9" aria-hidden="true" tabindex="-1"></a>maxs <span class="ot">&lt;-</span> <span class="fu">apply</span>(Boston, <span class="dv">2</span>, max)</span>
-<span id="cb4-10"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-10" aria-hidden="true" tabindex="-1"></a>mins <span class="ot">&lt;-</span> <span class="fu">apply</span>(Boston, <span class="dv">2</span>, min)</span>
-<span id="cb4-11"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-11" aria-hidden="true" tabindex="-1"></a>scaled <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">scale</span>(Boston, <span class="at">center =</span> mins, <span class="at">scale =</span> maxs <span class="sc">-</span> mins))</span>
-<span id="cb4-12"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># train-test random splitting</span></span>
-<span id="cb4-14"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">84</span>)</span>
-<span id="cb4-15"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-15" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Boston),<span class="fu">round</span>(<span class="fl">0.75</span><span class="sc">*</span><span class="fu">nrow</span>(Boston)))</span>
-<span id="cb4-16"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-16" aria-hidden="true" tabindex="-1"></a>train_Boston<span class="ot">&lt;-</span> scaled[ index,]</span>
-<span id="cb4-17"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-17" aria-hidden="true" tabindex="-1"></a>test_Boston <span class="ot">&lt;-</span> scaled[<span class="sc">-</span>index,]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-1" tabindex="-1"></a><span class="co"># load the data</span></span>
+<span id="cb4-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-2" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb4-3"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-3" tabindex="-1"></a><span class="fu">data</span>(Boston)</span>
+<span id="cb4-4"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-4" tabindex="-1"></a>Boston <span class="ot">&lt;-</span> Boston[,<span class="fu">c</span>(<span class="st">&quot;medv&quot;</span>,<span class="st">&quot;crim&quot;</span>,<span class="st">&quot;lstat&quot;</span>,<span class="st">&quot;rm&quot;</span>,<span class="st">&quot;rad&quot;</span>,<span class="st">&quot;chas&quot;</span>)]</span>
+<span id="cb4-5"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-5" tabindex="-1"></a><span class="fu">colnames</span>(Boston) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;median.value&quot;</span>,<span class="st">&quot;crime.rate&quot;</span>,<span class="st">&quot;low.socio.status&quot;</span>,</span>
+<span id="cb4-6"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-6" tabindex="-1"></a><span class="st">&quot;aver.rooms&quot;</span>,<span class="st">&quot;index.radial.highways&quot;</span>,<span class="st">&quot;river.bounds&quot;</span>)</span>
+<span id="cb4-7"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-8" tabindex="-1"></a><span class="co"># min-max normalisation</span></span>
+<span id="cb4-9"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-9" tabindex="-1"></a>maxs <span class="ot">&lt;-</span> <span class="fu">apply</span>(Boston, <span class="dv">2</span>, max)</span>
+<span id="cb4-10"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-10" tabindex="-1"></a>mins <span class="ot">&lt;-</span> <span class="fu">apply</span>(Boston, <span class="dv">2</span>, min)</span>
+<span id="cb4-11"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-11" tabindex="-1"></a>scaled <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">scale</span>(Boston, <span class="at">center =</span> mins, <span class="at">scale =</span> maxs <span class="sc">-</span> mins))</span>
+<span id="cb4-12"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-12" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-13" tabindex="-1"></a><span class="co"># train-test random splitting</span></span>
+<span id="cb4-14"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-14" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">84</span>)</span>
+<span id="cb4-15"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-15" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Boston),<span class="fu">round</span>(<span class="fl">0.75</span><span class="sc">*</span><span class="fu">nrow</span>(Boston)))</span>
+<span id="cb4-16"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-16" tabindex="-1"></a>train_Boston<span class="ot">&lt;-</span> scaled[ index,]</span>
+<span id="cb4-17"><a href="exercise-1-task-2-in-lecture-notes.html#cb4-17" tabindex="-1"></a>test_Boston <span class="ot">&lt;-</span> scaled[<span class="sc">-</span>index,]</span></code></pre></div>
 <p><strong>Hint</strong>:</p>
 <ol style="list-style-type: decimal">
 <li>Write down the <code>R</code> command to fit a neural network on this dataset.</li>
@@ -190,8 +194,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 Hint
 </button>
 <p>Suppose the hidden layer has only one hidden node. The corresponding <code>R</code> code is as follows.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb5-1" aria-hidden="true" tabindex="-1"></a>Model <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(median.value<span class="sc">~</span>crime.rate<span class="sc">+</span>low.socio.status<span class="sc">+</span>aver.rooms, </span>
-<span id="cb5-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb5-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data=</span>train_Boston, <span class="at">hidden=</span><span class="fu">c</span>(<span class="dv">1</span>), <span class="at">linear.output=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb5-1" tabindex="-1"></a>Model <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(median.value<span class="sc">~</span>crime.rate<span class="sc">+</span>low.socio.status<span class="sc">+</span>aver.rooms<span class="sc">+</span>river.bounds, </span>
+<span id="cb5-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb5-2" tabindex="-1"></a>                   <span class="at">data=</span>train_Boston, <span class="at">hidden=</span><span class="fu">c</span>(<span class="dv">1</span>), <span class="at">linear.output=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <ol start="2" style="list-style-type: decimal">
 <li>Write down the <code>R</code> commands to calculate SSEs for the training and test data sets.</li>
@@ -202,11 +206,11 @@ Hint
 </button>
 <p>Slightly different from the usual formula for sum of squared errors, we divide it by two so that the formula is consistent with the <code>neuralnet</code> package:
 <span class="math display">\[\frac{\sum(\text{observed}-\text{fitted values})^2}{2}\]</span></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># training SSEs</span></span>
-<span id="cb6-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-2" aria-hidden="true" tabindex="-1"></a>train_SSE <span class="ot">&lt;-</span> <span class="fu">sum</span>((Model<span class="sc">$</span>net.result[[<span class="dv">1</span>]]<span class="sc">-</span>train_Boston<span class="sc">$</span>median.value)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb6-3"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-3" aria-hidden="true" tabindex="-1"></a>test_pred <span class="ot">&lt;-</span> neuralnet<span class="sc">::</span><span class="fu">compute</span>(Model,test_Boston[,<span class="fu">c</span>(<span class="st">&quot;crime.rate&quot;</span>,</span>
-<span id="cb6-4"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;low.socio.status&quot;</span>,<span class="st">&quot;aver.rooms&quot;</span>)])</span>
-<span id="cb6-5"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-5" aria-hidden="true" tabindex="-1"></a>test_SSE <span class="ot">&lt;-</span> <span class="fu">sum</span>((test_pred<span class="sc">$</span>net.result[[<span class="dv">1</span>]]<span class="sc">-</span>test_Boston<span class="sc">$</span>median.value)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-1" tabindex="-1"></a><span class="co"># training SSEs</span></span>
+<span id="cb6-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-2" tabindex="-1"></a>train_SSE <span class="ot">&lt;-</span> <span class="fu">sum</span>((Model<span class="sc">$</span>net.result[[<span class="dv">1</span>]]<span class="sc">-</span>train_Boston<span class="sc">$</span>median.value)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb6-3"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-3" tabindex="-1"></a>test_pred <span class="ot">&lt;-</span> neuralnet<span class="sc">::</span><span class="fu">compute</span>(Model,test_Boston[,<span class="fu">c</span>(<span class="st">&quot;crime.rate&quot;</span>,</span>
+<span id="cb6-4"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-4" tabindex="-1"></a><span class="st">&quot;low.socio.status&quot;</span>,<span class="st">&quot;aver.rooms&quot;</span>)])</span>
+<span id="cb6-5"><a href="exercise-1-task-2-in-lecture-notes.html#cb6-5" tabindex="-1"></a>test_SSE <span class="ot">&lt;-</span> <span class="fu">sum</span>((test_pred<span class="sc">$</span>net.result[[<span class="dv">1</span>]]<span class="sc">-</span>test_Boston<span class="sc">$</span>median.value)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
 </div>
 <ol start="3" style="list-style-type: decimal">
 <li>Combining the two hints to solve the question.</li>
@@ -215,24 +219,24 @@ Hint
 <button>
 Solution
 </button>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(neuralnet)</span>
-<span id="cb7-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">84</span>)</span>
-<span id="cb7-3"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create an empty dataframe to save training and test SSE.</span></span>
-<span id="cb7-5"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-5" aria-hidden="true" tabindex="-1"></a>SSE <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">nrow=</span><span class="dv">5</span>, <span class="at">ncol=</span><span class="dv">3</span>))</span>
-<span id="cb7-6"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(SSE) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;no.hidden nodes&quot;</span>,<span class="st">&quot;train SSE&quot;</span>,<span class="st">&quot;test SSE&quot;</span>)</span>
-<span id="cb7-7"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># train the neural network and record training and test SSE</span></span>
-<span id="cb7-9"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>){</span>
-<span id="cb7-10"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-10" aria-hidden="true" tabindex="-1"></a>  SSE[i,<span class="dv">1</span>] <span class="ot">&lt;-</span> i <span class="co">#record the number of hidden nodes</span></span>
-<span id="cb7-11"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-11" aria-hidden="true" tabindex="-1"></a>  nn_boston <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(median.value<span class="sc">~</span>crime.rate<span class="sc">+</span>low.socio.status<span class="sc">+</span>aver.rooms<span class="sc">+</span>river.bounds,</span>
-<span id="cb7-12"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data=</span>train_Boston, <span class="at">hidden=</span><span class="fu">c</span>(i), <span class="at">linear.output=</span><span class="cn">TRUE</span>) <span class="co">#fit the model</span></span>
-<span id="cb7-13"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-13" aria-hidden="true" tabindex="-1"></a>  SSE[i,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">sum</span>((nn_boston<span class="sc">$</span>net.result[[<span class="dv">1</span>]] <span class="sc">-</span> train_Boston[,<span class="st">&quot;median.value&quot;</span>])<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span> <span class="co">#record training SSE</span></span>
-<span id="cb7-14"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-14" aria-hidden="true" tabindex="-1"></a>  test_pred <span class="ot">&lt;-</span> neuralnet<span class="sc">::</span><span class="fu">compute</span>(nn_boston, test_Boston[, <span class="fu">c</span>(<span class="st">&quot;crime.rate&quot;</span>,<span class="st">&quot;low.socio.status&quot;</span>,<span class="st">&quot;aver.rooms&quot;</span>,<span class="st">&quot;river.bounds&quot;</span>)])</span>
-<span id="cb7-15"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-15" aria-hidden="true" tabindex="-1"></a>  SSE[i,<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">sum</span>((test_pred<span class="sc">$</span>net.result[[<span class="dv">1</span>]] <span class="sc">-</span> test_Boston[, <span class="st">&quot;median.value&quot;</span>])<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span> <span class="co">#record test SSE</span></span>
-<span id="cb7-16"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-16" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-17"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-18"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-18" aria-hidden="true" tabindex="-1"></a>SSE</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-1" tabindex="-1"></a><span class="fu">library</span>(neuralnet)</span>
+<span id="cb7-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">84</span>)</span>
+<span id="cb7-3"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-4" tabindex="-1"></a><span class="co"># create an empty dataframe to save training and test SSE.</span></span>
+<span id="cb7-5"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-5" tabindex="-1"></a>SSE <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">nrow=</span><span class="dv">5</span>, <span class="at">ncol=</span><span class="dv">3</span>))</span>
+<span id="cb7-6"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-6" tabindex="-1"></a><span class="fu">colnames</span>(SSE) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;no.hidden nodes&quot;</span>,<span class="st">&quot;train SSE&quot;</span>,<span class="st">&quot;test SSE&quot;</span>)</span>
+<span id="cb7-7"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-8" tabindex="-1"></a><span class="co"># train the neural network and record training and test SSE</span></span>
+<span id="cb7-9"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-9" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>){</span>
+<span id="cb7-10"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-10" tabindex="-1"></a>  SSE[i,<span class="dv">1</span>] <span class="ot">&lt;-</span> i <span class="co">#record the number of hidden nodes</span></span>
+<span id="cb7-11"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-11" tabindex="-1"></a>  nn_boston <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(median.value<span class="sc">~</span>crime.rate<span class="sc">+</span>low.socio.status<span class="sc">+</span>aver.rooms<span class="sc">+</span>river.bounds,</span>
+<span id="cb7-12"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-12" tabindex="-1"></a>                         <span class="at">data=</span>train_Boston, <span class="at">hidden=</span><span class="fu">c</span>(i), <span class="at">linear.output=</span><span class="cn">TRUE</span>) <span class="co">#fit the model</span></span>
+<span id="cb7-13"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-13" tabindex="-1"></a>  SSE[i,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">sum</span>((nn_boston<span class="sc">$</span>net.result[[<span class="dv">1</span>]] <span class="sc">-</span> train_Boston[,<span class="st">&quot;median.value&quot;</span>])<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span> <span class="co">#record training SSE</span></span>
+<span id="cb7-14"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-14" tabindex="-1"></a>  test_pred <span class="ot">&lt;-</span> neuralnet<span class="sc">::</span><span class="fu">compute</span>(nn_boston, test_Boston[, <span class="fu">c</span>(<span class="st">&quot;crime.rate&quot;</span>,<span class="st">&quot;low.socio.status&quot;</span>,<span class="st">&quot;aver.rooms&quot;</span>,<span class="st">&quot;river.bounds&quot;</span>)])</span>
+<span id="cb7-15"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-15" tabindex="-1"></a>  SSE[i,<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">sum</span>((test_pred<span class="sc">$</span>net.result[[<span class="dv">1</span>]] <span class="sc">-</span> test_Boston[, <span class="st">&quot;median.value&quot;</span>])<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span> <span class="co">#record test SSE</span></span>
+<span id="cb7-16"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-16" tabindex="-1"></a>}</span>
+<span id="cb7-17"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-17" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="exercise-1-task-2-in-lecture-notes.html#cb7-18" tabindex="-1"></a>SSE</span></code></pre></div>
 <pre><code>##   no.hidden nodes train SSE test SSE
 ## 1               1  2.128904 4.342257
 ## 2               2  1.686398 3.460076
@@ -240,16 +244,16 @@ Solution
 ## 4               4  1.208661 3.345709
 ## 5               5  1.201828 3.091838</code></pre>
 <p>To visualise the SSEs, we create a bar plot using <code>ggplot</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar plot of results</span></span>
-<span id="cb9-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2);<span class="fu">library</span>(tibble)</span>
-<span id="cb9-3"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-3" aria-hidden="true" tabindex="-1"></a>Regression_NN_Errors <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Network =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;NN1&quot;</span>, <span class="st">&quot;NN2&quot;</span>, <span class="st">&quot;NN3&quot;</span>, <span class="st">&quot;NN4&quot;</span>, <span class="st">&quot;NN5&quot;</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
-<span id="cb9-4"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">DataSet =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Train&quot;</span>, <span class="st">&quot;Test&quot;</span>), <span class="at">time =</span> <span class="dv">5</span>),</span>
-<span id="cb9-5"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-5" aria-hidden="true" tabindex="-1"></a>                               <span class="at">SSE =</span> <span class="fu">c</span>(<span class="fu">t</span>(SSE[,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])))</span>
-<span id="cb9-6"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-6" aria-hidden="true" tabindex="-1"></a>nn_ggplot <span class="ot">&lt;-</span> Regression_NN_Errors <span class="sc">%&gt;%</span></span>
-<span id="cb9-7"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Network, SSE, <span class="at">fill =</span> DataSet)) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
-<span id="cb9-9"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Neural networks SSE (different number of nodes in the hidden layer)&quot;</span>)</span>
-<span id="cb9-10"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-10" aria-hidden="true" tabindex="-1"></a>nn_ggplot</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-1" tabindex="-1"></a><span class="co"># Bar plot of results</span></span>
+<span id="cb9-2"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2);<span class="fu">library</span>(tibble)</span>
+<span id="cb9-3"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-3" tabindex="-1"></a>Regression_NN_Errors <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Network =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;NN1&quot;</span>, <span class="st">&quot;NN2&quot;</span>, <span class="st">&quot;NN3&quot;</span>, <span class="st">&quot;NN4&quot;</span>, <span class="st">&quot;NN5&quot;</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb9-4"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-4" tabindex="-1"></a>                               <span class="at">DataSet =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Train&quot;</span>, <span class="st">&quot;Test&quot;</span>), <span class="at">time =</span> <span class="dv">5</span>),</span>
+<span id="cb9-5"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-5" tabindex="-1"></a>                               <span class="at">SSE =</span> <span class="fu">c</span>(<span class="fu">t</span>(SSE[,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])))</span>
+<span id="cb9-6"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-6" tabindex="-1"></a>nn_ggplot <span class="ot">&lt;-</span> Regression_NN_Errors <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-7" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Network, SSE, <span class="at">fill =</span> DataSet)) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-8" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-9"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Neural networks SSE (different number of nodes in the hidden layer)&quot;</span>)</span>
+<span id="cb9-10"><a href="exercise-1-task-2-in-lecture-notes.html#cb9-10" tabindex="-1"></a>nn_ggplot</span></code></pre></div>
 <p><img src="main_files/figure-html/unnamed-chunk-11-1.png" width="480" style="display: block; margin: auto;" />
 We can notice that:</p>
 <ul>
