@@ -60,7 +60,7 @@ test.std  <- cbind(test[,1],test.std)
 # option 2: Normalise the data
 min_max_scale_test <- function(x_tr, x_te){
   mins <- apply(x_tr, 2, min)
-  maxs <- apply(x_te, 2, max)
+  maxs <- apply(x_tr, 2, max)
   x_te <- rbind(mins,maxs, x_te)
   x_te <- apply(x_te, 2, function(x) (x-x[1])/(x[2]-x[1]))
   x_te <- x_te[-c(1:2),]

@@ -221,7 +221,7 @@ Solution
 <span id="cb22-15"><a href="exercise-3-dividend-data.html#cb22-15" tabindex="-1"></a><span class="co"># option 2: Normalise the data</span></span>
 <span id="cb22-16"><a href="exercise-3-dividend-data.html#cb22-16" tabindex="-1"></a>min_max_scale_test <span class="ot">&lt;-</span> <span class="cf">function</span>(x_tr, x_te){</span>
 <span id="cb22-17"><a href="exercise-3-dividend-data.html#cb22-17" tabindex="-1"></a>  mins <span class="ot">&lt;-</span> <span class="fu">apply</span>(x_tr, <span class="dv">2</span>, min)</span>
-<span id="cb22-18"><a href="exercise-3-dividend-data.html#cb22-18" tabindex="-1"></a>  maxs <span class="ot">&lt;-</span> <span class="fu">apply</span>(x_te, <span class="dv">2</span>, max)</span>
+<span id="cb22-18"><a href="exercise-3-dividend-data.html#cb22-18" tabindex="-1"></a>  maxs <span class="ot">&lt;-</span> <span class="fu">apply</span>(x_tr, <span class="dv">2</span>, max)</span>
 <span id="cb22-19"><a href="exercise-3-dividend-data.html#cb22-19" tabindex="-1"></a>  x_te <span class="ot">&lt;-</span> <span class="fu">rbind</span>(mins,maxs, x_te)</span>
 <span id="cb22-20"><a href="exercise-3-dividend-data.html#cb22-20" tabindex="-1"></a>  x_te <span class="ot">&lt;-</span> <span class="fu">apply</span>(x_te, <span class="dv">2</span>, <span class="cf">function</span>(x) (x<span class="sc">-</span>x[<span class="dv">1</span>])<span class="sc">/</span>(x[<span class="dv">2</span>]<span class="sc">-</span>x[<span class="dv">1</span>]))</span>
 <span id="cb22-21"><a href="exercise-3-dividend-data.html#cb22-21" tabindex="-1"></a>  x_te <span class="ot">&lt;-</span> x_te[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>),]</span>
@@ -243,8 +243,8 @@ Solution
 <span id="cb23-2"><a href="exercise-3-dividend-data.html#cb23-2" tabindex="-1"></a>nn_di <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(dividend<span class="sc">~</span>., <span class="at">data=</span>train, <span class="at">hidden=</span><span class="fu">c</span>(<span class="dv">5</span>), <span class="at">err.fct=</span><span class="st">&quot;ce&quot;</span>, <span class="at">act.fct=</span><span class="st">&quot;logistic&quot;</span>, <span class="at">linear.output=</span><span class="cn">FALSE</span>, <span class="at">likelihood=</span><span class="cn">TRUE</span>)</span>
 <span id="cb23-3"><a href="exercise-3-dividend-data.html#cb23-3" tabindex="-1"></a></span>
 <span id="cb23-4"><a href="exercise-3-dividend-data.html#cb23-4" tabindex="-1"></a><span class="fu">garson</span>(nn_di)</span></code></pre></div>
-<p><img src="main_files/figure-html/unnamed-chunk-22-1.png" width="672" />
-We can see that the variable <code>current_ratio</code> is the one with the strongest relationship with the response variable <code>dividend</code>, followed by <code>de</code>, <code>fcfps</code> and <code>mcap</code>. The variable <code>earnings_growth</code> has the least relationship with <code>dividend</code>.</p>
+<p><img src="main_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>We can see that the variable <code>current_ratio</code> is the one with the strongest relationship with the response variable <code>dividend</code>, followed by <code>de</code>, <code>fcfps</code> and <code>mcap</code>. The variable <code>earnings_growth</code> has the least relationship with <code>dividend</code>.</p>
 </div>
 <ol start="4" style="list-style-type: decimal">
 <li>Fit the above model multiple times using the argument <code>rep</code> and select the optimal model.</li>
