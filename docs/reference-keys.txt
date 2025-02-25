@@ -1,4 +1,5 @@
+fig:USdend
+tab:unnamed-chunk-19
 welcome-to-dmml-lab-6
-exercise-1-task-2-in-lecture-notes
-exercise-2-german-data
-exercise-3-dividend-data
+exercise-1-tasks-2-7-in-lecture-notes
+exercise-2-freedman-data
